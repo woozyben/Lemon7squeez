@@ -1,0 +1,45 @@
+local module = {}
+
+function module.pathToPart(char, part)
+
+	if char or char.Parent == nil then
+		
+		local beam = script:WaitForChild("Beam"):Clone()
+		local root = char:WaitForChild("HumanoidRootPart")
+		local a0 = root:WaitForChild("RootAttachment")
+		local a1 = nil
+		
+		if part:FindFirstChildOfClass("Attachment") then
+			a1 = part:FindFirstChildOfClass("Attachment")
+		else
+			a1 = Instance.new("Attachment") --If there is no attachment, then make one
+			a1.Name = "A1"
+			a1.Parent = part
+		end
+		
+		if a1 then
+			beam.Attachment0 = a0
+			beam.Attachment1 = a1
+			beam.Parent = char
+		else
+			warn("No attachment was inserted into "..part:GetFullName())
+		end
+		
+	end
+end
+
+function module.destroyPathToPart(char, part)
+	if char or char.Parent == nil then
+		
+		local beam = char:FindFirstChild("Beam")
+		if beam then
+			beam:Destroy()
+		end
+		
+		if part:FindFirstChildOfClass("Attachment") and part:FindFirstChild("A1") then
+			part:FindFirstChild("A1"):Destroy()
+		end	
+	end
+end
+
+return module
